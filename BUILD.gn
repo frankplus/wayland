@@ -1,0 +1,66 @@
+# Copyright (C) 2026 Oniro / Hybris Generic.
+# Licensed under the Apache License, Version 2.0.
+#
+# libwayland 1.23.1 (server + client), vendored for the Waydroid display
+# bridge (docs/hybris_generic/android_app_compat_plan.md §W1).
+#
+# No wayland-scanner runs at build time: generated/ carries pregenerated
+# protocol code for the core protocol, xdg-shell and libhybris'
+# wayland-android.xml — regeneration recipe in regenerate.sh.
+# config.h is hand-written for linux/musl (all probed functions exist).
+
+import("//build/ohos.gni")
+
+config("wayland_public_config") {
+  include_dirs = [
+    "src",
+    "generated",
+  ]
+}
+
+config("wayland_private_config") {
+  include_dirs = [ "." ]
+  cflags = [
+    "-DHAVE_CONFIG_H",
+    "-Wno-unused-parameter",
+    "-Wno-sign-compare",
+
+    # connection.c and wayland-os.c #define _GNU_SOURCE themselves; the
+    # OHOS toolchain already defines it on the command line, and the
+    # build treats -Wmacro-redefined as an error.
+    "-Wno-macro-redefined",
+  ]
+}
+
+wayland_support_sources = [
+  "src/connection.c",
+  "src/wayland-os.c",
+  "src/wayland-util.c",
+  "generated/wayland-protocol.c",
+]
+
+ohos_shared_library("libwayland_server") {
+  sources = wayland_support_sources + [
+              "src/event-loop.c",
+              "src/wayland-server.c",
+              "src/wayland-shm.c",
+            ]
+  configs = [ ":wayland_private_config" ]
+  public_configs = [ ":wayland_public_config" ]
+  external_deps = [ "libffi:libffi" ]
+
+  install_enable = true
+  part_name = "wayland"
+  subsystem_name = "thirdparty"
+}
+
+ohos_shared_library("libwayland_client") {
+  sources = wayland_support_sources + [ "src/wayland-client.c" ]
+  configs = [ ":wayland_private_config" ]
+  public_configs = [ ":wayland_public_config" ]
+  external_deps = [ "libffi:libffi" ]
+
+  install_enable = true
+  part_name = "wayland"
+  subsystem_name = "thirdparty"
+}

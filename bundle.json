@@ -1,0 +1,51 @@
+{
+    "name": "@ohos/wayland",
+    "description": "Third-party open-source software wayland | display server protocol libraries (server + client).",
+    "version": "1.23.1",
+    "license": "MIT",
+    "publishAs": "code-segment",
+    "segment": {
+        "destPath": "third_party/wayland"
+    },
+    "dirs": {},
+    "scripts": {},
+    "component": {
+        "name": "wayland",
+        "subsystem": "thirdparty",
+        "syscap": [],
+        "features": [],
+        "adapted_system_type": [ "standard" ],
+        "rom": "",
+        "ram": "",
+        "deps": {
+            "components": [ "libffi" ],
+            "third_party": [ "libffi" ]
+        },
+        "build": {
+            "sub_component": [
+                "//third_party/wayland:libwayland_server",
+                "//third_party/wayland:libwayland_client"
+            ],
+            "inner_kits": [
+                {
+                    "header": {
+                        "header_base": "//third_party/wayland/src",
+                        "header_files": [
+                            "wayland-server.h",
+                            "wayland-server-core.h",
+                            "wayland-client.h",
+                            "wayland-client-core.h",
+                            "wayland-util.h",
+                            "wayland-version.h"
+                        ]
+                    },
+                    "name": "//third_party/wayland:libwayland_server"
+                },
+                {
+                    "name": "//third_party/wayland:libwayland_client"
+                }
+            ],
+            "test": []
+        }
+    }
+}

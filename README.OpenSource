@@ -1,0 +1,11 @@
+[
+    {
+        "Name": "wayland",
+        "License": "MIT License",
+        "License File": "COPYING",
+        "Version Number": "1.23.1",
+        "Owner": "francesco.pham1@h-partners.com",
+        "Upstream URL": "https://gitlab.freedesktop.org/wayland/wayland",
+        "Description": "Wayland protocol library (libwayland-server / libwayland-client)"
+    }
+]
